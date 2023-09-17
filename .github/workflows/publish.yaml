@@ -10,4 +10,4 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_pub_publish.yml@v1
     with:
       dart_sdk: "stable"
-      pub_credentials: secrets.PUB_CREDENTIALS
+      pub_credentials: ${{ secrets.PUB_CREDENTIALS }}
