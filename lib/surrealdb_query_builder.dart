@@ -1,6 +1,8 @@
 /// A Very Good Project created by Very Good CLI.
 library surrealdb_query_builder;
 
+import 'package:surrealdb_query_builder/src/utils/list_utils.dart';
+
 part './src/builders/common/logical_op.dart';
 part './src/builders/common/op.dart';
 part './src/builders/select.dart';

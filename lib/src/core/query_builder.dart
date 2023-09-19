@@ -14,6 +14,6 @@ final class End extends QueryBuilder with Build {
 /// Add Build method on [QueryBuilder] that ends
 base mixin Build on QueryBuilder {
   String build() {
-    return "${_query.join(' ')};";
+    return "${_query.joinWithTrim(' ')};";
   }
 }

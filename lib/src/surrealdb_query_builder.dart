@@ -5,11 +5,31 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
   SurrealdbQueryBuilder() : super([]);
 
   static SurrealdbClauseBuilder select({
-    required String recordId,
-    String fields = '*',
-  }) =>
-      SurrealdbClauseBuilder(['SELECT', fields, 'FROM', recordId]);
+    required String thing,
+    List<String> fields = const ['*'],
+    List<String> omitfields = const [],
+    bool only = false,
+  }) {
+    final omit = omitfields.joinWithTrim();
+    return SurrealdbClauseBuilder([
+      'SELECT',
+      fields.joinWithTrim(),
+      if (omit.isNotEmpty) 'OMIT',
+      omitfields.joinWithTrim(),
+      'FROM',
+      if (only) 'ONLY',
+      thing
+    ]);
+  }
 
-  static SurrealdbClauseBuilder create({required String recordId}) =>
-      SurrealdbClauseBuilder(['CREATE', recordId]);
+  static SurrealdbClauseBuilder selectValue({
+    required String thing,
+    required String value,
+    bool only = false,
+  }) =>
+      SurrealdbClauseBuilder(
+          ['SELECT', 'VALUE', value, 'FROM', if (only) 'ONLY', thing]);
+
+  static SurrealdbClauseBuilder create({required String thing}) =>
+      SurrealdbClauseBuilder(['CREATE', thing]);
 }

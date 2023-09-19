@@ -5,6 +5,7 @@ part of '../../../surrealdb_query_builder.dart';
 final class SurrealdbClauseBuilder extends QueryBuilder
     with
         Build,
+        WithClause,
         WhereClause,
         OrderByClause,
         SplitAtClause,
@@ -15,6 +16,35 @@ final class SurrealdbClauseBuilder extends QueryBuilder
         TimeoutClause,
         ParallelClause {
   const SurrealdbClauseBuilder(super._query);
+}
+
+/// Handles `NOINDEX`, `INDEX`
+base mixin WithClause on QueryBuilder {
+  AfterWith withIndex({required List<String> indexes}) {
+    assert(indexes.isNotEmpty, 'indexes cannot be empty');
+    _query.addAll(['WITH', 'INDEX', indexes.joinWithTrim()]);
+    return AfterWith(_query);
+  }
+
+  AfterWith withNoIndex() {
+    _query.addAll(['WITH', 'NOINDEX']);
+    return AfterWith(_query);
+  }
+}
+
+final class AfterWith extends QueryBuilder
+    with
+        Build,
+        WhereClause,
+        OrderByClause,
+        SplitAtClause,
+        GroupByClause,
+        LimitClause,
+        StartClause,
+        FetchClause,
+        TimeoutClause,
+        ParallelClause {
+  const AfterWith(super._query);
 }
 
 /// Handles `WHERE`
@@ -60,8 +90,6 @@ base mixin OrderByClause on QueryBuilder {
 final class AfterOrderBy extends QueryBuilder
     with
         Build,
-        SplitAtClause,
-        GroupByClause,
         LimitClause,
         StartClause,
         FetchClause,
@@ -83,7 +111,6 @@ base mixin SplitAtClause on QueryBuilder {
 final class AfterSplitAt extends QueryBuilder
     with
         Build,
-        GroupByClause,
         LimitClause,
         StartClause,
         FetchClause,
@@ -97,7 +124,7 @@ base mixin GroupByClause on QueryBuilder {
   AfterGroupBy groupBy({
     required List<String> fields,
   }) {
-    _query.addAll(['GROUP', fields.map((e) => e.trim()).join(', ')]);
+    _query.addAll(['GROUP', fields.joinWithTrim()]);
     return AfterGroupBy(_query);
   }
 }
@@ -148,7 +175,7 @@ base mixin FetchClause on QueryBuilder {
   AfterFetch fetch({
     required List<String> fields,
   }) {
-    _query.addAll(['FETCH', fields.map((e) => e.trim()).join(', ')]);
+    _query.addAll(['FETCH', fields.joinWithTrim()]);
     return AfterFetch(_query);
   }
 }
@@ -174,12 +201,8 @@ final class AfterTimeout extends QueryBuilder with Build, ParallelClause {
 
 /// Handles `PARALLEL`
 base mixin ParallelClause on QueryBuilder {
-  AfterParallel parallel() {
+  End parallel() {
     _query.add('PARALLEL');
-    return AfterParallel(_query);
+    return End(_query);
   }
-}
-
-final class AfterParallel extends QueryBuilder with Build {
-  const AfterParallel(super._query);
 }

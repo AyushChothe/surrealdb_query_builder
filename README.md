@@ -1,7 +1,8 @@
 # Surrealdb Query Builder
 
+[![pub package](https://img.shields.io/pub/v/surrealdb_query_builder.svg?label=surrealdb_query_builder&color=blue)](https://pub.dartlang.org/packages/surrealdb_query_builder)
+[![ci](https://github.com/AyushChothe/surrealdb_query_builder/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/AyushChothe/surrealdb_query_builder/actions/workflows/main.yaml)
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
-[![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
 [![License: MIT][license_badge]][license_link]
 
 A Very Good Project created by Very Good CLI.
@@ -25,6 +26,20 @@ dart pub get
 
 ---
 
+## Features ✨
+
+- [x] `SELECT` Statement
+- [ ] `LIVE SELECT` Statement
+- [ ] `INSERT` Statement
+- [ ] `CREATE` Statement
+- [ ] `UPDATE` Statement
+- [ ] `DELETE` Statement
+- [ ] `RELATE` Statement
+- [ ] `REMOVE` Statement
+
+### Maybe
+- [ ] `DEFINE` Statement
+
 ## Continuous Integration 🤖
 
 Surrealdb Query Builder comes with a built-in [GitHub Actions workflow][github_actions_link] powered by [Very Good Workflows][very_good_workflows_link] but you can also add your preferred CI/CD solution.
@@ -38,9 +53,9 @@ Out of the box, on each pull request and push, the CI `formats`, `lints`, and `t
 To run all unit tests:
 
 ```sh
-dart pub global activate coverage 1.2.0
-dart test --coverage=coverage
-dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info
+dart pub global activate coverage
+dart pub global run coverage:test_with_coverage
+dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info -b .
 ```
 
 To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov).

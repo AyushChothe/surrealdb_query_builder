@@ -1,0 +1,103 @@
+{
+  "type": "CodeCoverage",
+  "coverage": [
+    {
+      "source": "package:surrealdb_query_builder/src/builders/common/op.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fbuilders%2Fcommon%2Fop.dart",
+        "uri": "package:surrealdb_query_builder/src/builders/common/op.dart",
+        "_kind": "library"
+      },
+      "hits": [5, 1, 7, 1, 9, 3, 10, 2, 13, 1, 17, 3, 18, 2]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/builders/select.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fbuilders%2Fselect.dart",
+        "uri": "package:surrealdb_query_builder/src/builders/select.dart",
+        "_kind": "library"
+      },
+      "hits": [
+        175, 1, 178, 4, 179, 2, 160, 1, 163, 3, 164, 2, 204, 1, 205, 2, 206, 2,
+        103, 0, 106, 0, 107, 0, 23, 1, 24, 2, 25, 4, 26, 2, 29, 0, 30, 0, 31, 0,
+        190, 1, 193, 3, 194, 2, 69, 1, 124, 0, 127, 0, 128, 0, 145, 1, 148, 3,
+        149, 2, 52, 2, 53, 4, 54, 4, 98, 1, 170, 1, 185, 1, 75, 2, 76, 4, 77, 2,
+        78, 2, 79, 4, 80, 4, 81, 2, 82, 4, 83, 4, 86, 4, 155, 1, 140, 0, 119, 0,
+        18, 1, 47, 1, 199, 1
+      ]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/core/query_builder.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fcore%2Fquery_builder.dart",
+        "uri": "package:surrealdb_query_builder/src/core/query_builder.dart",
+        "_kind": "library"
+      },
+      "hits": [16, 5, 17, 15, 11, 1, 5, 1]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/builders/common/logical_op.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fbuilders%2Fcommon%2Flogical_op.dart",
+        "uri": "package:surrealdb_query_builder/src/builders/common/logical_op.dart",
+        "_kind": "library"
+      },
+      "hits": [6, 1, 8, 1, 9, 2, 10, 2, 13, 1, 14, 2, 15, 2, 18, 3]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/surrealdb_query_builder.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fsurrealdb_query_builder.dart",
+        "uri": "package:surrealdb_query_builder/src/surrealdb_query_builder.dart",
+        "_kind": "library"
+      },
+      "hits": [
+        5, 3, 7, 1, 13, 1, 14, 2, 16, 1, 17, 2, 18, 1, 19, 1, 20, 1, 21, 1, 25,
+        1, 30, 1, 31, 3, 33, 0, 34, 0
+      ]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/core/constants/models.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Fcore%2Fconstants%2Fmodels.dart",
+        "uri": "package:surrealdb_query_builder/src/core/constants/models.dart",
+        "_kind": "library"
+      },
+      "hits": [4, 1]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/utils/constructor_utils.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Futils%2Fconstructor_utils.dart",
+        "uri": "package:surrealdb_query_builder/src/utils/constructor_utils.dart",
+        "_kind": "library"
+      },
+      "hits": [3, 1, 4, 2, 5, 1, 7, 0]
+    },
+    {
+      "source": "package:surrealdb_query_builder/src/utils/list_utils.dart",
+      "script": {
+        "type": "@Script",
+        "fixedId": true,
+        "id": "libraries/1/scripts/package%3Asurrealdb_query_builder%2Fsrc%2Futils%2Flist_utils.dart",
+        "uri": "package:surrealdb_query_builder/src/utils/list_utils.dart",
+        "_kind": "library"
+      },
+      "hits": [2, 1, 3, 7]
+    }
+  ]
+}
