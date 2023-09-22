@@ -1,6 +1,6 @@
 part of '../surrealdb_query_builder.dart';
 
-/// Handles `SELECT`
+/// Handles all base queries
 final class SurrealdbQueryBuilder extends QueryBuilder {
   SurrealdbQueryBuilder() : super([]);
 

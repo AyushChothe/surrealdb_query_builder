@@ -18,7 +18,7 @@ void main() {
             .eq(field: 'age', value: '23')
             .next()
             .build(),
-        equals('SELECT * FROM person WHERE name = Ayush AND age = 23;'),
+        equals('SELECT * FROM person WHERE name = Ayush && age = 23;'),
       );
     });
     test('select where or statement', () {
@@ -29,7 +29,7 @@ void main() {
             .or()
             .eq(field: 'age', value: '23')
             .build(),
-        equals('SELECT * FROM person WHERE name = Ayush OR age = 23;'),
+        equals('SELECT * FROM person WHERE name = Ayush || age = 23;'),
       );
     });
     test('select order by asc statement', () {
@@ -96,7 +96,7 @@ void main() {
             .build(),
         equals(
             'SELECT name, age OMIT fullname FROM person WITH INDEX unique_name '
-            'WHERE name = ayush OR name = ash AND age != 0 '
+            'WHERE name = ayush || name = ash && age != 0 '
             'ORDER age NUMERIC DESC LIMIT 5 START 0 '
             'FETCH projects TIMEOUT 5s PARALLEL;'),
       );
@@ -141,6 +141,42 @@ void main() {
               .next()
               .fetch(fields: ['projects']).build(),
           equals('LIVE SELECT * FROM person WHERE age > 18 FETCH projects;'));
+    });
+  });
+
+  group('Logical Operators', () {
+    test('nco (??)', () {
+      expect(
+        SurrealdbQueryBuilder.select(
+          thing: SurrealdbOpBuilder.raw()
+              .value(value: 'NULL')
+              .nco()
+              .value(value: '0')
+              .nco()
+              .value(value: 'false')
+              .nco()
+              .value(value: '10')
+              .build(withSemicolon: false),
+        ).build(),
+        equals('SELECT * FROM NULL ?? 0 ?? false ?? 10;'),
+      );
+    });
+
+    test('tco (?:)', () {
+      expect(
+        SurrealdbQueryBuilder.select(
+          thing: SurrealdbOpBuilder.raw()
+              .value(value: 'NULL')
+              .tco()
+              .value(value: '0')
+              .tco()
+              .value(value: 'false')
+              .tco()
+              .value(value: '10')
+              .build(withSemicolon: false),
+        ).build(),
+        equals('SELECT * FROM NULL ?: 0 ?: false ?: 10;'),
+      );
     });
   });
 }

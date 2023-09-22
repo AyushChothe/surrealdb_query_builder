@@ -13,7 +13,7 @@ final class End extends QueryBuilder with Build {
 
 /// Add Build method on [QueryBuilder] that ends
 base mixin Build on QueryBuilder {
-  String build() {
-    return "${_query.joinWithTrim(' ')};";
+  String build({bool withSemicolon = true}) {
+    return '${_query.joinWithTrim(' ')}${withSemicolon ? ';' : ''}';
   }
 }
