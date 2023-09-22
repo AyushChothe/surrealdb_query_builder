@@ -20,6 +20,7 @@ jobs:
 
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_pub_publish.yml@v1
+    needs: vars
     with:
       dart_sdk: "stable"
       pub_credentials: ${{ needs.vars.outputs.PUB_CREDENTIALS }}
