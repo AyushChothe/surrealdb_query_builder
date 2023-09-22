@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - "surrealdb_query_builder-v*.*.*"
+  workflow_call:
+    secrets:
+      PUB_CREDENTIALS:
+        required: true
+        description: "Pub Credentials"
 
 jobs:
   vars:
