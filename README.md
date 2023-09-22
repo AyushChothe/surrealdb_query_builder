@@ -5,7 +5,7 @@
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
-A Very Good Project created by Very Good CLI.
+A SurrealDB Query Builder written in Pure Dart.
 
 ## Installation 💻
 
@@ -29,7 +29,7 @@ dart pub get
 ## Features ✨
 
 - [x] `SELECT` Statement
-- [ ] `LIVE SELECT` Statement
+- [x] `LIVE SELECT` Statement
 - [ ] `INSERT` Statement
 - [ ] `CREATE` Statement
 - [ ] `UPDATE` Statement
@@ -40,6 +40,56 @@ dart pub get
 ### Maybe
 - [ ] `DEFINE` Statement
 
+
+## Examples
+```dart
+
+  expect(
+    SurrealdbQueryBuilder.select(thing: 'person').build(),
+    equals('SELECT * FROM person;'),
+  ); 
+
+  expect(
+    SurrealdbQueryBuilder.select(thing: 'person')
+      .where()
+      .eq(field: 'name', value: 'Ayush')
+      .and()
+      .eq(field: 'age', value: '23')
+      .next()
+      .build(),
+    equals('SELECT * FROM person WHERE name = Ayush AND age = 23;'),
+  );
+
+  expect(
+    SurrealdbQueryBuilder.select(
+      thing: 'person',
+      omitfields: ['fullname'],
+      fields: ['name', 'age'],
+    )
+      .withIndex(indexes: ['unique_name'])
+      .where()
+      .eq(field: 'name', value: 'ayush')
+      .or()
+      .eq(field: 'name', value: 'ash')
+      .and()
+      .neq(field: 'age', value: '0')
+      .next()
+      .orderBy(orderBys: [
+        OrderBy(field: 'age', order: Order.desc, type: OrderType.numeric)
+      ])
+      .limit(limit: '5')
+      .start(start: '0')
+      .fetch(fields: ['projects'])
+      .timeout(duration: '5s')
+      .parallel()
+      .build(),
+    equals(
+      'SELECT name, age OMIT fullname FROM person WITH INDEX unique_name '
+      'WHERE name = ayush OR name = ash AND age != 0 '
+      'ORDER age NUMERIC DESC LIMIT 5 START 0 '
+      'FETCH projects TIMEOUT 5s PARALLEL;'),
+  );
+```
 ## Continuous Integration 🤖
 
 Surrealdb Query Builder comes with a built-in [GitHub Actions workflow][github_actions_link] powered by [Very Good Workflows][very_good_workflows_link] but you can also add your preferred CI/CD solution.
@@ -82,3 +132,9 @@ open coverage/index.html
 [very_good_ventures_link_light]: https://verygood.ventures#gh-light-mode-only
 [very_good_ventures_link_dark]: https://verygood.ventures#gh-dark-mode-only
 [very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows
+
+
+## Contributors 💪
+![contributors](https://contrib.rocks/image?repo=AyushChothe/surrealdb_query_builder)
+
+Made with [contrib.rocks](https://contrib.rocks).

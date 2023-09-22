@@ -17,4 +17,28 @@ final class SurrealdbOpBuilder<T extends QueryBuilder> extends QueryBuilder {
     _query.addAll([field, '!=', value]);
     return SurrealdbLogicalOpBuilder<T>(_query);
   }
+
+  SurrealdbLogicalOpBuilder<T> gt(
+      {required String field, required String value}) {
+    _query.addAll([field, '>', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  SurrealdbLogicalOpBuilder<T> lt(
+      {required String field, required String value}) {
+    _query.addAll([field, '<', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  SurrealdbLogicalOpBuilder<T> gte(
+      {required String field, required String value}) {
+    _query.addAll([field, '>=', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  SurrealdbLogicalOpBuilder<T> lte(
+      {required String field, required String value}) {
+    _query.addAll([field, '<=', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
 }

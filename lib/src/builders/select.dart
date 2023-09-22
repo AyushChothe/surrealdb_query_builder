@@ -1,21 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../../../surrealdb_query_builder.dart';
 
-/// Handles `WHERE`, `ORDER BY`
-final class SurrealdbClauseBuilder extends QueryBuilder
+/// Handles Clasues for `SELECT`
+final class SurrealdbClauseBuilderForSelect extends QueryBuilder
     with
         Build,
         WithClause,
-        WhereClause,
+        WhereClause<AfterWhere>,
         OrderByClause,
         SplitAtClause,
         GroupByClause,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
-  const SurrealdbClauseBuilder(super._query);
+  const SurrealdbClauseBuilderForSelect(super._query);
 }
 
 /// Handles `NOINDEX`, `INDEX`
@@ -35,24 +35,16 @@ base mixin WithClause on QueryBuilder {
 final class AfterWith extends QueryBuilder
     with
         Build,
-        WhereClause,
+        WhereClause<AfterWhere>,
         OrderByClause,
         SplitAtClause,
         GroupByClause,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
   const AfterWith(super._query);
-}
-
-/// Handles `WHERE`
-base mixin WhereClause on QueryBuilder {
-  SurrealdbOpBuilder<AfterWhere> where() {
-    _query.add('WHERE');
-    return SurrealdbOpBuilder<AfterWhere>(_query);
-  }
 }
 
 final class AfterWhere extends QueryBuilder
@@ -63,7 +55,7 @@ final class AfterWhere extends QueryBuilder
         GroupByClause,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
   const AfterWhere(super._query);
@@ -92,7 +84,7 @@ final class AfterOrderBy extends QueryBuilder
         Build,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
   const AfterOrderBy(super._query);
@@ -113,7 +105,7 @@ final class AfterSplitAt extends QueryBuilder
         Build,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
   const AfterSplitAt(super._query);
@@ -134,7 +126,7 @@ final class AfterGroupBy extends QueryBuilder
         Build,
         LimitClause,
         StartClause,
-        FetchClause,
+        FetchClause<AfterFetch>,
         TimeoutClause,
         ParallelClause {
   const AfterGroupBy(super._query);
@@ -151,7 +143,12 @@ base mixin LimitClause on QueryBuilder {
 }
 
 final class AfterLimit extends QueryBuilder
-    with Build, StartClause, FetchClause, TimeoutClause, ParallelClause {
+    with
+        Build,
+        StartClause,
+        FetchClause<AfterFetch>,
+        TimeoutClause,
+        ParallelClause {
   const AfterLimit(super._query);
 }
 
@@ -166,18 +163,8 @@ base mixin StartClause on QueryBuilder {
 }
 
 final class AfterStart extends QueryBuilder
-    with Build, FetchClause, TimeoutClause, ParallelClause {
+    with Build, FetchClause<AfterFetch>, TimeoutClause, ParallelClause {
   const AfterStart(super._query);
-}
-
-/// Handles `FETCH`
-base mixin FetchClause on QueryBuilder {
-  AfterFetch fetch({
-    required List<String> fields,
-  }) {
-    _query.addAll(['FETCH', fields.joinWithTrim()]);
-    return AfterFetch(_query);
-  }
 }
 
 final class AfterFetch extends QueryBuilder

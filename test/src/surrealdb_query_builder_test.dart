@@ -2,11 +2,7 @@ import 'package:surrealdb_query_builder/surrealdb_query_builder.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('SurrealdbQueryBuilder', () {
-    test('can be instantiated', () {
-      expect(SurrealdbQueryBuilder(), isNotNull);
-    });
-
+  group('Select', () {
     test('select statement', () {
       expect(
         SurrealdbQueryBuilder.select(thing: 'person').build(),
@@ -104,6 +100,47 @@ void main() {
             'ORDER age NUMERIC DESC LIMIT 5 START 0 '
             'FETCH projects TIMEOUT 5s PARALLEL;'),
       );
+    });
+  });
+
+  group('Live Select', () {
+    test('live select statement', () {
+      expect(SurrealdbQueryBuilder.liveSelect(thing: 'person').build(),
+          equals('LIVE SELECT * FROM person;'));
+    });
+    test('live select value statement', () {
+      expect(
+          SurrealdbQueryBuilder.liveSelectValue(thing: 'person', value: 'name')
+              .build(),
+          equals('LIVE SELECT VALUE name FROM person;'));
+    });
+
+    test('live select diff statement', () {
+      expect(SurrealdbQueryBuilder.liveSelectDiff(thing: 'person').build(),
+          equals('LIVE SELECT DIFF FROM person;'));
+    });
+    test('live select where statement', () {
+      expect(
+          SurrealdbQueryBuilder.liveSelect(thing: 'person')
+              .where()
+              .gt(field: 'age', value: '18')
+              .build(),
+          equals('LIVE SELECT * FROM person WHERE age > 18;'));
+    });
+    test('live select fetch statement', () {
+      expect(
+          SurrealdbQueryBuilder.liveSelect(thing: 'person')
+              .fetch(fields: ['projects']).build(),
+          equals('LIVE SELECT * FROM person FETCH projects;'));
+    });
+    test('live select where and fetch statement', () {
+      expect(
+          SurrealdbQueryBuilder.liveSelect(thing: 'person')
+              .where()
+              .gt(field: 'age', value: '18')
+              .next()
+              .fetch(fields: ['projects']).build(),
+          equals('LIVE SELECT * FROM person WHERE age > 18 FETCH projects;'));
     });
   });
 }
