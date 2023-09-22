@@ -5,12 +5,16 @@ on:
     tags:
       - "surrealdb_query_builder-v*.*.*"
 
-env:
-  PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
-
 jobs:
+  vars:
+    runs-on: ubuntu-latest
+    outputs:
+      PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
+    steps:
+      - run: echo "Exposing env vars"
+
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_pub_publish.yml@v1
     with:
       dart_sdk: "stable"
-      pub_credentials: "$PUB_CREDENTIALS"
+      pub_credentials: ${{ needs.vars.outputs.PUB_CREDENTIALS }}
