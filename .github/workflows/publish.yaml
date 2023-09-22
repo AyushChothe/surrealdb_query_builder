@@ -11,16 +11,9 @@ on:
         description: "Pub Credentials"
 
 jobs:
-  vars:
-    runs-on: ubuntu-latest
-    outputs:
-      PUB_CREDENTIALS: ${{ secrets.PUB_CREDENTIALS }}
-    steps:
-      - run: echo "Exposing env vars"
-
   build:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_pub_publish.yml@v1
-    needs: vars
     with:
       dart_sdk: "stable"
-      pub_credentials: ${{ needs.vars.outputs.PUB_CREDENTIALS }}
+    secrets:
+      pub_credentials: ${{ secrets.PUB_CREDENTIALS }}
