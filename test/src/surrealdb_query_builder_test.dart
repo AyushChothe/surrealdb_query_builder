@@ -34,15 +34,17 @@ void main() {
     });
     test('select order by asc statement', () {
       expect(
-        SurrealdbQueryBuilder.select(fields: ['name'], thing: 'person')
+        SurrealdbQueryBuilder.select(
+                fields: [const Field(name: 'name', alias: 'nm')],
+                thing: 'person')
             .orderBy(orderBys: [OrderBy(field: 'name')]).build(),
-        equals('SELECT name FROM person ORDER name ASC;'),
+        equals('SELECT name AS nm FROM person ORDER name ASC;'),
       );
     });
     test('select order by desc statement', () {
       expect(
         SurrealdbQueryBuilder.select(
-          fields: ['age'],
+          fields: [const Field(name: 'age')],
           thing: 'person',
         ).orderBy(orderBys: [OrderBy(field: 'age', order: Order.desc)]).build(),
         equals('SELECT age FROM person ORDER age DESC;'),
@@ -75,7 +77,7 @@ void main() {
         SurrealdbQueryBuilder.select(
           thing: 'person',
           omitfields: ['fullname'],
-          fields: ['name', 'age'],
+          fields: [const Field(name: 'name'), const Field(name: 'age')],
         )
             .withIndex(indexes: ['unique_name'])
             .where()

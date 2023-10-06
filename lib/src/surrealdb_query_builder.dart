@@ -6,14 +6,14 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
 
   static SurrealdbClauseBuilderForSelect select({
     required String thing,
-    List<String> fields = const ['*'],
+    List<Field> fields = const [Field(name: '*')],
     List<String> omitfields = const [],
     bool only = false,
   }) {
     final omit = omitfields.joinWithTrim();
     return SurrealdbClauseBuilderForSelect([
       'SELECT',
-      fields.joinWithTrim(),
+      fields.map((e) => e.toString()).toList().joinWithTrim(),
       if (omit.isNotEmpty) 'OMIT',
       omitfields.joinWithTrim(),
       'FROM',
@@ -32,10 +32,15 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
 
   static SurrealdbClauseBuilderForLiveSelect liveSelect({
     required String thing,
-    List<String> fields = const ['*'],
+    List<Field> fields = const [Field(name: '*')],
   }) {
-    return SurrealdbClauseBuilderForLiveSelect(
-        ['LIVE', 'SELECT', fields.joinWithTrim(), 'FROM', thing]);
+    return SurrealdbClauseBuilderForLiveSelect([
+      'LIVE',
+      'SELECT',
+      fields.map((e) => e.toString()).toList().joinWithTrim(),
+      'FROM',
+      thing
+    ]);
   }
 
   static SurrealdbClauseBuilderForLiveSelect liveSelectValue({

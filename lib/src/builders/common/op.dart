@@ -103,6 +103,131 @@ final class SurrealdbOpBuilder<T extends QueryBuilder> extends QueryBuilder {
     return SurrealdbLogicalOpBuilder<T>(_query);
   }
 
+  /// Handles `CONTAINS`
+  SurrealdbLogicalOpBuilder<T> contains(
+      {required String field, required String value}) {
+    _query.addAll([field, 'CONTAINS', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `CONTAINSNOT`
+  SurrealdbLogicalOpBuilder<T> containsNot(
+      {required String field, required String value}) {
+    _query.addAll([field, 'CONTAINSNOT', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `CONTAINSALL`
+  SurrealdbLogicalOpBuilder<T> containsAll(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'CONTAINSALL',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `CONTAINSANY`
+  SurrealdbLogicalOpBuilder<T> containsAny(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'CONTAINSANY',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `CONTAINSNONE`
+  SurrealdbLogicalOpBuilder<T> containsNone(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'CONTAINSNONE',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `INSIDE`
+  SurrealdbLogicalOpBuilder<T> inside(
+      {required String field, required List<String> value}) {
+    _query.addAll([field, 'INSIDE', '[', value.joinWithTrim(), ']']);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `NOTINSIDE`
+  SurrealdbLogicalOpBuilder<T> notInside(
+      {required String field, required List<String> value}) {
+    _query.addAll([field, 'NOTINSIDE', '[', value.joinWithTrim(), ']']);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `ALLINSIDE`
+  SurrealdbLogicalOpBuilder<T> allInside(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'ALLINSIDE',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `ANYINSIDE`
+  SurrealdbLogicalOpBuilder<T> anyInside(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'ANYINSIDE',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `NONEINSIDE`
+  SurrealdbLogicalOpBuilder<T> noneInside(
+      {required List<String> lhs, required List<String> rhs}) {
+    _query.addAll([
+      '[',
+      lhs.joinWithTrim(),
+      ']',
+      'NONEINSIDE',
+      '[',
+      rhs.joinWithTrim(),
+      ']'
+    ]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
+  /// Handles `@@` or `@[ref]@`
+  SurrealdbLogicalOpBuilder<T> matches(
+      {required String field, required String value, String ref = ''}) {
+    _query.addAll([field, '@$ref@', value]);
+    return SurrealdbLogicalOpBuilder<T>(_query);
+  }
+
   /// Handles raw value
   SurrealdbLogicalOpBuilder<T> value({required String value}) {
     _query.add(value);
