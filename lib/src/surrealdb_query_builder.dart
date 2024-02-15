@@ -57,6 +57,30 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
         ['LIVE', 'SELECT', 'DIFF', 'FROM', thing]);
   }
 
-  static SurrealdbClauseBuilderForSelect create({required String thing}) =>
-      SurrealdbClauseBuilderForSelect(['CREATE', thing]);
+  static SurrealdbClauseBuilderForCreate create({
+    required String thing,
+    Map<String, dynamic>? content,
+    bool only = false,
+  }) =>
+      SurrealdbClauseBuilderForCreate([
+        'CREATE',
+        if (only) 'ONLY',
+        thing,
+        if (content != null) ...['CONTENT', jsonEncode(content)]
+      ]);
+
+  static String transaction(Iterable<Build> Function() statements) => [
+        'BEGIN;',
+        ...statements().map((e) => e.build()),
+        'COMMIT;'
+      ].joinWithTrim('\n');
+
+  static End use({String? ns, String? db}) {
+    assert(!(ns == null && db == null), 'Both ns and db cannot be null');
+    return End([
+      'USE',
+      if (ns != null) ...['NS', ns],
+      if (db != null) ...['DB', db]
+    ]);
+  }
 }

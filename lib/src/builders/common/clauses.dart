@@ -17,3 +17,25 @@ base mixin FetchClause<T extends QueryBuilder> on QueryBuilder {
     return getInstance<T>(_query);
   }
 }
+
+/// Handles `TIMEOUT`
+base mixin TimeoutClause on QueryBuilder {
+  AfterTimeout timeout({
+    required String duration,
+  }) {
+    _query.addAll(['TIMEOUT', duration]);
+    return AfterTimeout(_query);
+  }
+}
+
+final class AfterTimeout extends QueryBuilder with Build, ParallelClause {
+  const AfterTimeout(super._query);
+}
+
+/// Handles `PARALLEL`
+base mixin ParallelClause on QueryBuilder {
+  End parallel() {
+    _query.add('PARALLEL');
+    return End(_query);
+  }
+}

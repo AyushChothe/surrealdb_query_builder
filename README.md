@@ -30,8 +30,9 @@ dart pub get
 
 - [x] `SELECT` Statement
 - [x] `LIVE SELECT` Statement
+- [x] `CREATE` Statement
+- [x] `USE` Statement
 - [ ] `INSERT` Statement
-- [ ] `CREATE` Statement
 - [ ] `UPDATE` Statement
 - [ ] `DELETE` Statement
 - [ ] `RELATE` Statement

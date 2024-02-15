@@ -1,3 +1,4 @@
+import 'package:surrealdb_query_builder/src/utils/list_utils.dart';
 import 'package:surrealdb_query_builder/surrealdb_query_builder.dart';
 import 'package:test/test.dart';
 
@@ -180,5 +181,127 @@ void main() {
         equals('SELECT * FROM NULL ?: 0 ?: false ?: 10;'),
       );
     });
+  });
+
+  group('Create', () {
+    test('create statement', () {
+      expect(
+        SurrealdbQueryBuilder.create(thing: 'person', content: {
+          'name': 'Tobie',
+          'company': 'SurrealDB',
+          'skills': ['Rust', 'Go', 'JavaScript'],
+          'date': '2024-02-15T15:27:00Z'
+        }).build(),
+        equals('CREATE person CONTENT '
+            '{"name":"Tobie",'
+            '"company":"SurrealDB",'
+            '"skills":["Rust","Go","JavaScript"],'
+            '"date":"2024-02-15T15:27:00Z"};'),
+      );
+    });
+    test('create statement with return none', () {
+      expect(
+        SurrealdbQueryBuilder.create(thing: 'person', content: {
+          'name': 'Tobie',
+          'company': 'SurrealDB',
+          'skills': ['Rust', 'Go', 'JavaScript'],
+          'date': '2024-02-15T15:27:00Z'
+        }).returns(Returns.none()).build(),
+        equals('CREATE person CONTENT '
+            '{"name":"Tobie",'
+            '"company":"SurrealDB",'
+            '"skills":["Rust","Go","JavaScript"],'
+            '"date":"2024-02-15T15:27:00Z"} RETURN NONE;'),
+      );
+    });
+
+    test('create statement with return fields', () {
+      expect(
+        SurrealdbQueryBuilder.create(thing: 'person', content: {
+          'name': 'Tobie',
+          'company': 'SurrealDB',
+          'skills': ['Rust', 'Go', 'JavaScript'],
+          'date': '2024-02-15T15:27:00Z'
+        }).returns(Returns.fields(['skills'])).build(),
+        equals('CREATE person CONTENT '
+            '{"name":"Tobie",'
+            '"company":"SurrealDB",'
+            '"skills":["Rust","Go","JavaScript"],'
+            '"date":"2024-02-15T15:27:00Z"} '
+            'RETURN skills;'),
+      );
+    });
+
+    test('create only statement with return fields with timeout and parallel',
+        () {
+      expect(
+        SurrealdbQueryBuilder.create(thing: 'person', only: true, content: {
+          'name': 'Tobie',
+          'company': 'SurrealDB',
+          'skills': ['Rust', 'Go', 'JavaScript'],
+          'date': '2024-02-15T15:27:00Z'
+        })
+            .returns(Returns.fields(['skills']))
+            .timeout(duration: '5s')
+            .parallel()
+            .build(),
+        equals('CREATE ONLY person CONTENT '
+            '{"name":"Tobie",'
+            '"company":"SurrealDB",'
+            '"skills":["Rust","Go","JavaScript"],'
+            '"date":"2024-02-15T15:27:00Z"} '
+            'RETURN skills TIMEOUT 5s PARALLEL;'),
+      );
+    });
+  });
+
+  group('Transaction', () {
+    test('transaction block', () {
+      expect(SurrealdbQueryBuilder.transaction(() sync* {
+        const thing = 'person';
+        yield SurrealdbQueryBuilder.create(thing: thing);
+        yield SurrealdbQueryBuilder.select(thing: thing);
+
+        const value = 'name';
+        yield SurrealdbQueryBuilder.selectValue(thing: thing, value: value);
+      }),
+          equals([
+            'BEGIN;',
+            'CREATE person;',
+            'SELECT * FROM person;',
+            'SELECT VALUE name FROM person;',
+            'COMMIT;'
+          ].joinWithTrim('\n')));
+    });
+  });
+  group('Use', () {
+    test(
+      'Use ns statement',
+      () => expect(
+        SurrealdbQueryBuilder.use(ns: 'test').build(),
+        equals('USE NS test;'),
+      ),
+    );
+    test(
+      'Use db statement',
+      () => expect(
+        SurrealdbQueryBuilder.use(db: 'test').build(),
+        equals('USE DB test;'),
+      ),
+    );
+    test(
+      'Use statement with ns and db',
+      () => expect(
+        SurrealdbQueryBuilder.use(ns: 'test', db: 'data').build(),
+        equals('USE NS test DB data;'),
+      ),
+    );
+    test(
+      'Use without ns and db',
+      () => expect(
+        () => SurrealdbQueryBuilder.use().build(),
+        throwsA(isA<AssertionError>()),
+      ),
+    );
   });
 }

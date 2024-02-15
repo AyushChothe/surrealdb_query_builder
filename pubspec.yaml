@@ -1,6 +1,6 @@
 name: surrealdb_query_builder
 description: A SurrealDB Query Builder written in Pure Dart
-version: 0.3.0
+version: 0.4.0
 repository: https://github.com/AyushChothe/surrealdb_query_builder
 
 environment:

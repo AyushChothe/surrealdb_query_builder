@@ -1,3 +1,9 @@
+## 0.4.0
+
+* `CREATE` Statement implementation completed
+* `TRANSACTION` Statement implementation completed
+* `USE` Statement implementation completed
+
 ## 0.3.0
 
 * `LIVE SELECT` Statement implementation completed
