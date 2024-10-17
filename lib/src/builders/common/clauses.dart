@@ -11,7 +11,7 @@ base mixin WhereClause<T extends QueryBuilder> on QueryBuilder {
 /// Handles `FETCH`
 base mixin FetchClause<T extends QueryBuilder> on QueryBuilder {
   T fetch({
-    required List<String> fields,
+    required List<FieldType> fields,
   }) {
     _query.addAll(['FETCH', fields.joinWithTrim()]);
     return getInstance<T>(_query);

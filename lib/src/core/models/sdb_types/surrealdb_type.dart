@@ -15,14 +15,14 @@ abstract class SurrealDbType<T> {
 }
 
 class RawType extends SurrealDbType<Object> {
-  RawType(super.value);
+  const RawType(super.value);
 
   @override
   String toValue() => '$value';
 }
 
 class TableType extends SurrealDbType<String> {
-  TableType(super.value);
+  const TableType(super.value);
 
   @override
   String toValue() => 'type::table(${value.format()})';
@@ -74,7 +74,7 @@ class DurationType extends SurrealDbType<Union2<Object, Duration, String>> {
 }
 
 class FieldType extends SurrealDbType<String> {
-  FieldType(super.value);
+  const FieldType(super.value);
 
   @override
   String toValue() => 'type::field(${value.format()})';
@@ -93,14 +93,14 @@ class PointType
 }
 
 class StringType extends SurrealDbType<Object> {
-  StringType(super.value);
+  const StringType(super.value);
 
   @override
   String toValue() => 'type::string(${value.format()})';
 }
 
 class ThingType extends SurrealDbType<(Object, Object)> {
-  ThingType(super.value);
+  const ThingType(super.value);
 
   @override
   String toValue() =>
@@ -117,7 +117,7 @@ class RangeType extends SurrealDbType<Union2<Object, List<int>, String>> {
 }
 
 class RecordType extends SurrealDbType<(String, String?)> {
-  RecordType(super.value);
+  const RecordType(super.value);
 
   factory RecordType.record(String record) => RecordType((record, null));
   factory RecordType.recordWithTable(String record, String table) =>
@@ -131,7 +131,7 @@ class RecordType extends SurrealDbType<(String, String?)> {
 }
 
 class UuidType extends SurrealDbType<String> {
-  UuidType(super.value);
+  const UuidType(super.value);
 
   @override
   String toValue() => 'type::uuid(${value.format()})';

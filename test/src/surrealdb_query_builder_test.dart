@@ -14,34 +14,42 @@ void main() {
   group('Select', () {
     test('select statement', () {
       expect(
-        SurrealdbQueryBuilder.select(thing: TableType('person')).build(),
+        SurrealdbQueryBuilder.select(thing: const TableType('person')).build(),
         equals('SELECT * FROM type::table("person");'),
       );
     });
     test('select where and statement', () {
       expect(
-        SurrealdbQueryBuilder.select(thing: TableType('person'))
+        SurrealdbQueryBuilder.select(thing: const TableType('person'))
             .where()
-            .eq(field: 'name', value: 'Ayush')
+            .eq(
+                field: const FieldType('name'),
+                value: const StringType('Ayush'))
             .and()
-            .eq(field: 'age', value: '23')
+            .eq(field: const FieldType('age'), value: NumberType(23.u21))
             .next()
             .build(),
         equals(
-          'SELECT * FROM type::table("person") WHERE name = Ayush && age = 23;',
+          'SELECT * FROM type::table("person") WHERE '
+          'type::field("name") = type::string("Ayush") '
+          '&& type::field("age") = type::number(23);',
         ),
       );
     });
     test('select where or statement', () {
       expect(
-        SurrealdbQueryBuilder.select(thing: TableType('person'))
+        SurrealdbQueryBuilder.select(thing: const TableType('person'))
             .where()
-            .eq(field: 'name', value: 'Ayush')
+            .eq(
+                field: const FieldType('name'),
+                value: const StringType('Ayush'))
             .or()
-            .eq(field: 'age', value: '23')
+            .eq(field: const FieldType('age'), value: NumberType(23.u21))
             .build(),
         equals(
-          'SELECT * FROM type::table("person") WHERE name = Ayush || age = 23;',
+          'SELECT * FROM type::table("person") WHERE '
+          'type::field("name") = type::string("Ayush") '
+          '|| type::field("age") = type::number(23);',
         ),
       );
     });
@@ -49,7 +57,7 @@ void main() {
       expect(
         SurrealdbQueryBuilder.select(
                 fields: [const Field(name: 'name', alias: 'nm')],
-                thing: TableType('person'))
+                thing: const TableType('person'))
             .orderBy(orderBys: [OrderBy(field: 'name')]).build(),
         equals('SELECT name AS nm FROM type::table("person") ORDER name ASC;'),
       );
@@ -58,7 +66,7 @@ void main() {
       expect(
         SurrealdbQueryBuilder.select(
           fields: [const Field(name: 'age')],
-          thing: TableType('person'),
+          thing: const TableType('person'),
         ).orderBy(orderBys: [OrderBy(field: 'age', order: Order.desc)]).build(),
         equals('SELECT age FROM type::table("person") ORDER age DESC;'),
       );
@@ -93,32 +101,36 @@ void main() {
     test('select complete with all options', () {
       expect(
         SurrealdbQueryBuilder.select(
-          thing: TableType('person'),
+          thing: const TableType('person'),
           omitfields: ['fullname'],
           fields: [const Field(name: 'name'), const Field(name: 'age')],
         )
             .withIndex(indexes: ['unique_name'])
             .where()
-            .eq(field: 'name', value: 'ayush')
+            .eq(
+                field: const FieldType('name'),
+                value: const StringType('ayush'))
             .or()
-            .eq(field: 'name', value: 'ash')
+            .eq(field: const FieldType('name'), value: const StringType('ash'))
             .and()
-            .neq(field: 'age', value: '0')
+            .neq(field: const FieldType('age'), value: NumberType('0'.u22))
             .next()
             .orderBy(orderBys: [
               OrderBy(field: 'age', order: Order.desc, type: OrderType.numeric)
             ])
-            .limit(limit: '5')
-            .start(start: '0')
-            .fetch(fields: ['projects'])
+            .limit(limit: IntType(5.u21))
+            .start(start: IntType(0.u21))
+            .fetch(fields: [const FieldType('projects')])
             .timeout(duration: '5s')
             .parallel()
             .build(),
         equals('SELECT name, age OMIT fullname FROM type::table("person") '
             'WITH INDEX unique_name '
-            'WHERE name = ayush || name = ash && age != 0 '
-            'ORDER age NUMERIC DESC LIMIT 5 START 0 '
-            'FETCH projects TIMEOUT 5s PARALLEL;'),
+            'WHERE type::field("name") = type::string("ayush") '
+            '|| type::field("name") = type::string("ash") '
+            '&& type::field("age") != type::number("0") '
+            'ORDER age NUMERIC DESC LIMIT type::int(5) START type::int(0) '
+            'FETCH type::field("projects") TIMEOUT 5s PARALLEL;'),
       );
     });
   });
@@ -126,47 +138,51 @@ void main() {
   group('Live Select', () {
     test('live select statement', () {
       expect(
-          SurrealdbQueryBuilder.liveSelect(thing: TableType('person')).build(),
+          SurrealdbQueryBuilder.liveSelect(thing: const TableType('person'))
+              .build(),
           equals('LIVE SELECT * FROM type::table("person");'));
     });
     test('live select value statement', () {
       expect(
           SurrealdbQueryBuilder.liveSelectValue(
-                  thing: TableType('person'), value: 'name')
+                  thing: const TableType('person'), value: 'name')
               .build(),
           equals('LIVE SELECT VALUE name FROM type::table("person");'));
     });
 
     test('live select diff statement', () {
       expect(
-          SurrealdbQueryBuilder.liveSelectDiff(thing: TableType('person'))
+          SurrealdbQueryBuilder.liveSelectDiff(thing: const TableType('person'))
               .build(),
           equals('LIVE SELECT DIFF FROM type::table("person");'));
     });
     test('live select where statement', () {
       expect(
-          SurrealdbQueryBuilder.liveSelect(thing: TableType('person'))
+          SurrealdbQueryBuilder.liveSelect(thing: const TableType('person'))
               .where()
-              .gt(field: 'age', value: '18')
+              .gt(field: const FieldType('age'), value: NumberType(18.u21))
               .build(),
-          equals('LIVE SELECT * FROM type::table("person") WHERE age > 18;'));
+          equals('LIVE SELECT * FROM type::table("person") WHERE '
+              'type::field("age") > type::number(18);'));
     });
     test('live select fetch statement', () {
       expect(
-          SurrealdbQueryBuilder.liveSelect(thing: TableType('person'))
-              .fetch(fields: ['projects']).build(),
-          equals('LIVE SELECT * FROM type::table("person") FETCH projects;'));
+          SurrealdbQueryBuilder.liveSelect(thing: const TableType('person'))
+              .fetch(fields: [const FieldType('projects')]).build(),
+          equals('LIVE SELECT * FROM type::table("person") '
+              'FETCH type::field("projects");'));
     });
     test('live select where and fetch statement', () {
       expect(
-          SurrealdbQueryBuilder.liveSelect(thing: TableType('person'))
+          SurrealdbQueryBuilder.liveSelect(thing: const TableType('person'))
               .where()
-              .gt(field: 'age', value: '18')
+              .gt(field: const FieldType('age'), value: NumberType(18.u21))
               .next()
-              .fetch(fields: ['projects']).build(),
+              .fetch(fields: [const FieldType('projects')]).build(),
           equals(
             'LIVE SELECT * FROM type::table("person") '
-            'WHERE age > 18 FETCH projects;',
+            'WHERE type::field("age") > type::number(18) '
+            'FETCH type::field("projects");',
           ));
     });
   });
@@ -176,7 +192,7 @@ void main() {
       expect(
         SurrealdbQueryBuilder.select(
           thing: RawType(SurrealdbOpBuilder.raw()
-              .value(value: RawType('NULL'))
+              .value(value: const RawType('NULL'))
               .nco()
               .value(value: NumberType(0.u21))
               .nco()
@@ -196,7 +212,7 @@ void main() {
       expect(
         SurrealdbQueryBuilder.select(
           thing: RawType(SurrealdbOpBuilder.raw()
-              .value(value: RawType('NULL'))
+              .value(value: const RawType('NULL'))
               .tco()
               .value(value: NumberType(0.u21))
               .tco()
@@ -216,12 +232,14 @@ void main() {
   group('Create', () {
     test('create statement', () {
       expect(
-        SurrealdbQueryBuilder.create(thing: TableType('person'), content: {
-          'name': StringType('Tobie'),
-          'company': StringType('SurrealDB'),
-          'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
-          'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
-        }).build(),
+        SurrealdbQueryBuilder.create(
+            thing: const TableType('person'),
+            content: {
+              'name': const StringType('Tobie'),
+              'company': const StringType('SurrealDB'),
+              'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
+              'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
+            }).build(),
         equals('CREATE type::table("person") CONTENT '
             '{"name":type::string("Tobie"),'
             '"company":type::string("SurrealDB"),'
@@ -231,12 +249,14 @@ void main() {
     });
     test('create statement with return none', () {
       expect(
-        SurrealdbQueryBuilder.create(thing: TableType('person'), content: {
-          'name': StringType('Tobie'),
-          'company': StringType('SurrealDB'),
-          'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
-          'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
-        }).returns(Returns.none()).build(),
+        SurrealdbQueryBuilder.create(
+            thing: const TableType('person'),
+            content: {
+              'name': const StringType('Tobie'),
+              'company': const StringType('SurrealDB'),
+              'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
+              'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
+            }).returns(Returns.none()).build(),
         equals('CREATE type::table("person") CONTENT '
             '{"name":type::string("Tobie"),'
             '"company":type::string("SurrealDB"),'
@@ -248,12 +268,14 @@ void main() {
 
     test('create statement with return fields', () {
       expect(
-        SurrealdbQueryBuilder.create(thing: TableType('person'), content: {
-          'name': StringType('Tobie'),
-          'company': StringType('SurrealDB'),
-          'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
-          'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
-        }).returns(Returns.fields(['skills'])).build(),
+        SurrealdbQueryBuilder.create(
+            thing: const TableType('person'),
+            content: {
+              'name': const StringType('Tobie'),
+              'company': const StringType('SurrealDB'),
+              'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
+              'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
+            }).returns(Returns.fields(['skills'])).build(),
         equals('CREATE type::table("person") CONTENT '
             '{"name":type::string("Tobie"),'
             '"company":type::string("SurrealDB"),'
@@ -267,11 +289,11 @@ void main() {
         () {
       expect(
         SurrealdbQueryBuilder.create(
-          thing: TableType('person'),
+          thing: const TableType('person'),
           only: true,
           content: {
-            'name': StringType('Tobie'),
-            'company': StringType('SurrealDB'),
+            'name': const StringType('Tobie'),
+            'company': const StringType('SurrealDB'),
             'skills': ArrayType(['Rust', 'Go', 'JavaScript'].u21),
             'date': DateTimeType('2024-02-15T15:27:00Z'.u22)
           },
@@ -294,12 +316,12 @@ void main() {
     test('transaction block', () {
       expect(SurrealdbQueryBuilder.transaction(() sync* {
         const thing = 'person';
-        yield SurrealdbQueryBuilder.create(thing: TableType(thing));
-        yield SurrealdbQueryBuilder.select(thing: TableType(thing));
+        yield SurrealdbQueryBuilder.create(thing: const TableType(thing));
+        yield SurrealdbQueryBuilder.select(thing: const TableType(thing));
 
         const value = 'name';
         yield SurrealdbQueryBuilder.selectValue(
-            thing: TableType(thing), value: value);
+            thing: const TableType(thing), value: value);
       }),
           equals([
             'BEGIN;',

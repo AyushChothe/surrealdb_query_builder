@@ -135,9 +135,9 @@ final class AfterGroupBy extends QueryBuilder
 /// Handles `LIMIT`
 base mixin LimitClause on QueryBuilder {
   AfterLimit limit({
-    required String limit,
+    required IntType limit,
   }) {
-    _query.addAll(['LIMIT', limit]);
+    _query.addAll(['LIMIT', limit.toString()]);
     return AfterLimit(_query);
   }
 }
@@ -155,9 +155,9 @@ final class AfterLimit extends QueryBuilder
 /// Handles `START`
 base mixin StartClause on QueryBuilder {
   AfterStart start({
-    required String start,
+    required IntType start,
   }) {
-    _query.addAll(['START', start]);
+    _query.addAll(['START', start.toString()]);
     return AfterStart(_query);
   }
 }
