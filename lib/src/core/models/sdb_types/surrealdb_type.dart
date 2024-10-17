@@ -25,7 +25,7 @@ class TableType extends SurrealDbType<String> {
   TableType(super.value);
 
   @override
-  String toValue() => 'type::table{(${value.format()})';
+  String toValue() => 'type::table(${value.format()})';
 }
 
 class ArrayType<T> extends SurrealDbType<Union2<Object, List<T>, String>> {
@@ -118,6 +118,10 @@ class RangeType extends SurrealDbType<Union2<Object, List<int>, String>> {
 
 class RecordType extends SurrealDbType<(String, String?)> {
   RecordType(super.value);
+
+  factory RecordType.record(String record) => RecordType((record, null));
+  factory RecordType.recordWithTable(String record, String table) =>
+      RecordType((record, table));
 
   @override
   String toValue() {

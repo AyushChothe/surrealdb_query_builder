@@ -229,8 +229,8 @@ final class SurrealdbOpBuilder<T extends QueryBuilder> extends QueryBuilder {
   }
 
   /// Handles raw value
-  SurrealdbLogicalOpBuilder<T> value({required String value}) {
-    _query.add(value);
+  SurrealdbLogicalOpBuilder<T> value<U>({required SurrealDbType<U> value}) {
+    _query.add(value.toString());
     return SurrealdbLogicalOpBuilder<T>(_query);
   }
 }

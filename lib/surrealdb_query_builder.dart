@@ -1,7 +1,7 @@
 /// A Very Good Project created by Very Good CLI.
 library surrealdb_query_builder;
 
-import 'dart:convert';
+import 'package:surrealdb_query_builder/src/core/models/sdb_types/surrealdb_type.dart';
 
 part './src/builders/common/clauses.dart';
 part './src/builders/common/logical_op.dart';

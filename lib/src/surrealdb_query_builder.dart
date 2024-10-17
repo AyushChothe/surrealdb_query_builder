@@ -5,7 +5,7 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
   SurrealdbQueryBuilder() : super([]);
 
   static SurrealdbClauseBuilderForSelect select({
-    required String thing,
+    required SurrealDbType<dynamic> thing,
     List<Field> fields = const [Field(name: '*')],
     List<String> omitfields = const [],
     bool only = false,
@@ -18,20 +18,26 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
       omitfields.joinWithTrim(),
       'FROM',
       if (only) 'ONLY',
-      thing
+      thing.toString()
     ]);
   }
 
   static SurrealdbClauseBuilderForSelect selectValue({
-    required String thing,
+    required SurrealDbType<dynamic> thing,
     required String value,
     bool only = false,
   }) =>
-      SurrealdbClauseBuilderForSelect(
-          ['SELECT', 'VALUE', value.trim(), 'FROM', if (only) 'ONLY', thing]);
+      SurrealdbClauseBuilderForSelect([
+        'SELECT',
+        'VALUE',
+        value.trim(),
+        'FROM',
+        if (only) 'ONLY',
+        thing.toString()
+      ]);
 
   static SurrealdbClauseBuilderForLiveSelect liveSelect({
-    required String thing,
+    required SurrealDbType<dynamic> thing,
     List<Field> fields = const [Field(name: '*')],
   }) {
     return SurrealdbClauseBuilderForLiveSelect([
@@ -39,34 +45,34 @@ final class SurrealdbQueryBuilder extends QueryBuilder {
       'SELECT',
       fields.map((e) => e.toString()).toList().joinWithTrim(),
       'FROM',
-      thing
+      thing.toString()
     ]);
   }
 
   static SurrealdbClauseBuilderForLiveSelect liveSelectValue({
-    required String thing,
+    required SurrealDbType<dynamic> thing,
     required String value,
   }) {
     return SurrealdbClauseBuilderForLiveSelect(
-        ['LIVE', 'SELECT', 'VALUE', value.trim(), 'FROM', thing]);
+        ['LIVE', 'SELECT', 'VALUE', value.trim(), 'FROM', thing.toString()]);
   }
 
   static SurrealdbClauseBuilderForLiveSelect liveSelectDiff(
-      {required String thing}) {
+      {required SurrealDbType<dynamic> thing}) {
     return SurrealdbClauseBuilderForLiveSelect(
-        ['LIVE', 'SELECT', 'DIFF', 'FROM', thing]);
+        ['LIVE', 'SELECT', 'DIFF', 'FROM', thing.toString()]);
   }
 
   static SurrealdbClauseBuilderForCreate create({
-    required String thing,
-    Map<String, dynamic>? content,
+    required SurrealDbType<dynamic> thing,
+    Map<String, SurrealDbType<dynamic>>? content,
     bool only = false,
   }) =>
       SurrealdbClauseBuilderForCreate([
         'CREATE',
         if (only) 'ONLY',
-        thing,
-        if (content != null) ...['CONTENT', jsonEncode(content)]
+        thing.toString(),
+        if (content != null) ...['CONTENT', content.encode()]
       ]);
 
   static String transaction(Iterable<Build> Function() statements) => [
