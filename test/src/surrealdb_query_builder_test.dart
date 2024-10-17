@@ -1,8 +1,15 @@
-import 'package:surrealdb_query_builder/src/utils/list_utils.dart';
+import 'package:extension_type_unions/bounded_extension_type_unions.dart';
 import 'package:surrealdb_query_builder/surrealdb_query_builder.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('Test', () {
+    test('union2', () {
+      final Union2<Object, List<double>, (double, double)> union2 =
+          [51.0, 52.0].u21;
+      expect('${union2.value}', equals('[51.0, 52.0]'));
+    });
+  });
   group('Select', () {
     test('select statement', () {
       expect(
