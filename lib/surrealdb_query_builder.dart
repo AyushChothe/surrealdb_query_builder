@@ -1,7 +1,8 @@
 /// A Very Good Project created by Very Good CLI.
 library surrealdb_query_builder;
 
-import 'package:surrealdb_query_builder/src/core/models/sdb_types/surrealdb_type.dart';
+import 'dart:typed_data';
+import 'package:extension_type_unions/bounded_extension_type_unions.dart';
 
 part './src/builders/common/clauses.dart';
 part './src/builders/common/logical_op.dart';
@@ -12,6 +13,7 @@ part './src/builders/select.dart';
 part './src/core/enums/enums.dart';
 part './src/core/models/field.dart';
 part './src/core/models/order_by.dart';
+part './src/core/models/sdb_types/surrealdb_type.dart';
 part './src/core/query_builder.dart';
 part './src/surrealdb_query_builder.dart';
 part './src/utils/constructor_utils.dart';

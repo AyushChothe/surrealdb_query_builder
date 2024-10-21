@@ -1,5 +1,4 @@
 import 'package:extension_type_unions/bounded_extension_type_unions.dart';
-import 'package:surrealdb_query_builder/src/core/models/sdb_types/surrealdb_type.dart';
 import 'package:surrealdb_query_builder/surrealdb_query_builder.dart';
 import 'package:test/test.dart';
 

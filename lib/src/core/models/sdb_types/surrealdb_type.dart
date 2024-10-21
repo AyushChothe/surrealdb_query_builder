@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:extension_type_unions/bounded_extension_type_unions.dart';
-import 'package:surrealdb_query_builder/surrealdb_query_builder.dart';
+part of '../../../../../surrealdb_query_builder.dart';
 
 abstract class SurrealDbType<T> {
   const SurrealDbType(this.value);
